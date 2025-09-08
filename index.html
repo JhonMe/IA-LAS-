@@ -1,0 +1,1803 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔬 Luisito</title>
+    <link rel="icon" href="School LAS.png">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Arial', sans-serif;
+            background: 
+                url('ie LAS 2025.png') center/cover no-repeat;
+            margin: 0;
+            padding: 32px;
+            text-align: center;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 80%, rgba(46, 204, 113, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(52, 152, 219, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        h1 { 
+            margin-top: 0; 
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        /* Contenedor principal solo con Einstein */
+        .main-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        /* Contenedor principal de Einstein */
+        #cara-container {
+            position: relative;
+            width: 300px;
+            height: 400px;
+        }
+
+        .einstein-container {
+            position: relative;
+            width: 300px;
+            height: 400px;
+            background: radial-gradient(circle at center, #f8f9fa, #e9ecef);
+            border-radius: 50px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .einstein-container:hover {
+            transform: scale(1.05);
+        }
+
+        /* Botones de control */
+        .controls {
+            position: absolute;
+            bottom: -80px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 20;
+        }
+
+        .control-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            color: white;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .control-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        .control-btn:active {
+            transform: scale(0.95);
+        }
+
+        .control-btn.active {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            animation: pulse 1.5s infinite;
+        }
+
+        .control-btn.listening {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            animation: listening-pulse 1s infinite;
+        }
+
+        /* Botón de iniciar conversación */
+        .start-btn {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+        }
+
+        .start-btn:hover {
+            background: linear-gradient(45deg, #27ae60, #229954);
+        }
+
+        /* Botón de micrófono */
+        .mic-btn {
+            background: linear-gradient(45deg, #f39c12, #e67e22);
+        }
+
+        .mic-btn:hover {
+            background: linear-gradient(45deg, #e67e22, #d35400);
+        }
+
+        /* Tooltips */
+        .control-btn::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .control-btn:hover::after {
+            opacity: 1;
+        }
+
+        /* Estados de los botones */
+        .status-indicator {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .status-ready {
+            background: #2ecc71;
+        }
+
+        .status-listening {
+            background: #f39c12;
+            animation: blink 1s infinite;
+        }
+
+        .status-speaking {
+            background: #e74c3c;
+            animation: pulse 0.5s infinite;
+        }
+
+        /* Cabello realista - optimizado */
+        .hair {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 220px;
+            height: 130px;
+            background: radial-gradient(ellipse at 40% 60%, 
+                #e8e8e8 0%, 
+                #d0d0d0 25%, 
+                #c0c0c0 50%, 
+                #b0b0b0 75%, 
+                #a0a0a0 100%);
+            border-radius: 110px 110px 90px 90px;
+            animation: hairFloat 6s ease-in-out infinite;
+            box-shadow: 
+                0 5px 15px rgba(0, 0, 0, 0.2),
+                inset -5px -5px 15px rgba(160, 160, 160, 0.3),
+                inset 5px 5px 15px rgba(240, 240, 240, 0.8);
+        }
+
+        /* Mechones laterales principales */
+        .hair::before {
+            content: '';
+            position: absolute;
+            top: -25px;
+            left: -35px;
+            width: 90px;
+            height: 85px;
+            background: radial-gradient(circle at 60% 70%, 
+                #e0e0e0 0%, 
+                #c8c8c8 30%, 
+                #b8b8b8 60%, 
+                #a8a8a8 100%);
+            border-radius: 60% 40% 50% 70%;
+            animation: hairWave 4s ease-in-out infinite;
+            box-shadow: 
+                2px 3px 8px rgba(0, 0, 0, 0.15),
+                inset -3px -3px 6px rgba(150, 150, 150, 0.4);
+            transform-origin: bottom right;
+        }
+
+        .hair::after {
+            content: '';
+            position: absolute;
+            top: -20px;
+            right: -30px;
+            width: 85px;
+            height: 80px;
+            background: radial-gradient(circle at 40% 70%, 
+                #e0e0e0 0%, 
+                #c8c8c8 30%, 
+                #b8b8b8 60%, 
+                #a8a8a8 100%);
+            border-radius: 40% 60% 70% 50%;
+            animation: hairWave 5s ease-in-out infinite reverse;
+            box-shadow: 
+                -2px 3px 8px rgba(0, 0, 0, 0.15),
+                inset 3px -3px 6px rgba(150, 150, 150, 0.4);
+            transform-origin: bottom left;
+        }
+
+        /* Mechones adicionales - reducidos */
+        .hair-strand {
+            position: absolute;
+            background: linear-gradient(135deg, 
+                #d8d8d8 0%, 
+                #c0c0c0 50%, 
+                #b0b0b0 100%);
+            border-radius: 50px;
+            box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .strand-1 {
+            top: -15px;
+            left: 20px;
+            width: 25px;
+            height: 60px;
+            transform: rotate(-25deg);
+            animation: hairWave 8s ease-in-out infinite;
+        }
+
+        .strand-2 {
+            top: -20px;
+            left: 50px;
+            width: 20px;
+            height: 70px;
+            transform: rotate(-10deg);
+            animation: hairWave 7s ease-in-out infinite reverse;
+        }
+
+        .strand-3 {
+            top: -18px;
+            right: 45px;
+            width: 22px;
+            height: 65px;
+            transform: rotate(15deg);
+            animation: hairWave 9s ease-in-out infinite;
+        }
+
+        .strand-4 {
+            top: -12px;
+            right: 20px;
+            width: 28px;
+            height: 55px;
+            transform: rotate(30deg);
+            animation: hairWave 6s ease-in-out infinite reverse;
+        }
+
+        /* Textura del cabello */
+        .hair-texture {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    85deg,
+                    transparent 0px,
+                    rgba(180, 180, 180, 0.2) 1px,
+                    transparent 2px,
+                    transparent 4px
+                ),
+                repeating-linear-gradient(
+                    -95deg,
+                    transparent 0px,
+                    rgba(200, 200, 200, 0.15) 0.5px,
+                    transparent 1px,
+                    transparent 3px
+                ),
+                repeating-linear-gradient(
+                    75deg,
+                    transparent 0px,
+                    rgba(160, 160, 160, 0.1) 1px,
+                    transparent 3px,
+                    transparent 6px
+                );
+            border-radius: 110px 110px 90px 90px;
+            pointer-events: none;
+        }
+
+        /* Cara */
+        .face {
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 180px;
+            height: 220px;
+            background: radial-gradient(ellipse at 30% 30%, #fdd5c7 0%, #f4b8aa 35%, #e8a694 65%, #d49584 100%);
+            border-radius: 90px 90px 100px 100px;
+            animation: faceBreath 8s ease-in-out infinite;
+            box-shadow: 
+                inset -10px -10px 20px rgba(212, 149, 132, 0.3),
+                inset 10px 10px 20px rgba(253, 213, 199, 0.8),
+                0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Mejillas */
+        .face::before {
+            content: '';
+            position: absolute;
+            top: 70px;
+            left: 25px;
+            width: 25px;
+            height: 25px;
+            background: radial-gradient(circle, rgba(240, 128, 128, 0.4) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .face::after {
+            content: '';
+            position: absolute;
+            top: 70px;
+            right: 25px;
+            width: 25px;
+            height: 25px;
+            background: radial-gradient(circle, rgba(240, 128, 128, 0.4) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        /* Arrugas */
+        .wrinkles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .wrinkle {
+            position: absolute;
+            background: linear-gradient(to right, transparent, rgba(200, 150, 120, 0.3), transparent);
+            height: 1px;
+        }
+
+        .wrinkle-1 {
+            top: 45px;
+            left: 30px;
+            width: 30px;
+            transform: rotate(-15deg);
+        }
+
+        .wrinkle-2 {
+            top: 48px;
+            right: 30px;
+            width: 30px;
+            transform: rotate(15deg);
+        }
+
+        .wrinkle-3 {
+            top: 140px;
+            left: 40px;
+            width: 25px;
+            transform: rotate(10deg);
+        }
+
+        .wrinkle-4 {
+            top: 140px;
+            right: 40px;
+            width: 25px;
+            transform: rotate(-10deg);
+        }
+
+        /* Ojos */
+        .eye {
+            position: absolute;
+            width: 28px;
+            height: 18px;
+            background: linear-gradient(to bottom, #ffffff 0%, #f8f8f8 100%);
+            border-radius: 50%;
+            top: 58px;
+            overflow: hidden;
+            box-shadow: 
+                inset 0 -2px 4px rgba(0, 0, 0, 0.1),
+                0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .eye::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(to bottom, rgba(220, 180, 160, 0.6), transparent);
+            border-radius: 50% 50% 0 0;
+        }
+
+        .eye-left {
+            left: 42px;
+        }
+
+        .eye-right {
+            right: 42px;
+        }
+
+        .pupil {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: radial-gradient(circle at 30% 30%, #4a5568 0%, #2d3748 40%, #1a202c 100%);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: eyeMove 6s ease-in-out infinite;
+            box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .pupil::after {
+            content: '';
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: radial-gradient(circle, #ffffff 0%, rgba(255, 255, 255, 0.8) 100%);
+            border-radius: 50%;
+            top: 2px;
+            left: 3px;
+            box-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Pestañas */
+        .eyelashes {
+            position: absolute;
+            top: -2px;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, 
+                transparent 10%, 
+                rgba(100, 100, 100, 0.8) 15%, 
+                transparent 18%,
+                transparent 25%,
+                rgba(100, 100, 100, 0.8) 30%,
+                transparent 33%,
+                transparent 40%,
+                rgba(100, 100, 100, 0.8) 45%,
+                transparent 48%,
+                transparent 55%,
+                rgba(100, 100, 100, 0.8) 60%,
+                transparent 63%,
+                transparent 70%,
+                rgba(100, 100, 100, 0.8) 75%,
+                transparent 80%,
+                transparent 90%);
+        }
+
+        /* Cejas más realistas - optimizadas */
+        .eyebrow {
+            position: absolute;
+            width: 40px;
+            height: 12px;
+            background: linear-gradient(45deg, 
+                #b8b8b8 0%, 
+                #d0d0d0 25%, 
+                #c8c8c8 50%, 
+                #d4d4d4 75%, 
+                #b8b8b8 100%);
+            border-radius: 6px;
+            top: 42px;
+            box-shadow: 
+                0 1px 2px rgba(0, 0, 0, 0.2),
+                inset 0 1px 1px rgba(255, 255, 255, 0.3);
+        }
+
+        .eyebrow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                75deg,
+                transparent 0px,
+                rgba(160, 160, 160, 0.6) 1px,
+                transparent 2px,
+                transparent 4px
+            );
+            border-radius: 6px;
+        }
+
+        .eyebrow-left {
+            left: 38px;
+            transform: rotate(-8deg);
+        }
+
+        .eyebrow-right {
+            right: 38px;
+            transform: rotate(8deg);
+        }
+
+        /* Bigote más realista - optimizado */
+        .mustache {
+            position: absolute;
+            top: 118px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 65px;
+            height: 25px;
+            background: linear-gradient(to bottom, 
+                #d8d8d8 0%, 
+                #c0c0c0 30%, 
+                #b8b8b8 70%, 
+                #a8a8a8 100%);
+            border-radius: 30px 30px 15px 15px;
+            box-shadow: 
+                0 2px 4px rgba(0, 0, 0, 0.2),
+                inset 0 1px 2px rgba(255, 255, 255, 0.4);
+        }
+
+        .mustache::before {
+            content: '';
+            position: absolute;
+            left: -12px;
+            top: -3px;
+            width: 32px;
+            height: 18px;
+            background: linear-gradient(135deg, #d0d0d0, #b0b0b0);
+            border-radius: 50%;
+            transform: rotate(-25deg);
+            box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.3);
+        }
+
+        .mustache::after {
+            content: '';
+            position: absolute;
+            right: -12px;
+            top: -3px;
+            width: 32px;
+            height: 18px;
+            background: linear-gradient(45deg, #d0d0d0, #b0b0b0);
+            border-radius: 50%;
+            transform: rotate(25deg);
+            box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Textura del bigote */
+        .mustache-texture {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                80deg,
+                transparent 0px,
+                rgba(150, 150, 150, 0.3) 0.5px,
+                transparent 1px,
+                transparent 2px
+            );
+            border-radius: 30px 30px 15px 15px;
+        }
+
+        /* Nariz más realista */
+        .nose {
+            position: absolute;
+            top: 92px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 18px;
+            height: 28px;
+            background: radial-gradient(ellipse at 40% 30%, #f8c4b8 0%, #f0b0a4 40%, #e8a090 100%);
+            border-radius: 9px 9px 7px 7px;
+            box-shadow: 
+                -2px 2px 6px rgba(0, 0, 0, 0.1),
+                inset 1px 1px 2px rgba(255, 255, 255, 0.4),
+                inset -1px -1px 2px rgba(200, 150, 130, 0.3);
+        }
+
+        .nose::before {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 4px;
+            background: rgba(220, 180, 160, 0.6);
+            border-radius: 4px 4px 2px 2px;
+        }
+
+        /* Fosas nasales */
+        .nostril {
+            position: absolute;
+            bottom: 4px;
+            width: 2px;
+            height: 3px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 50%;
+        }
+
+        .nostril-left {
+            left: 5px;
+        }
+
+        .nostril-right {
+            right: 5px;
+        }
+
+        /* Boca más realista */
+        .mouth {
+            position: absolute;
+            top: 148px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 45px;
+            height: 22px;
+            background: linear-gradient(to bottom, 
+                #cd6155 0%, 
+                #a93226 40%, 
+                #922b21 100%);
+            border-radius: 0 0 45px 45px;
+            animation: mouthTalk 4s ease-in-out infinite;
+            box-shadow: 
+                0 2px 4px rgba(0, 0, 0, 0.2),
+                inset 0 1px 2px rgba(0, 0, 0, 0.3),
+                inset 0 -1px 1px rgba(255, 200, 200, 0.4);
+            transition: all 0.2s ease;
+        }
+
+        .mouth::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 35px;
+            height: 4px;
+            background: linear-gradient(to right, 
+                transparent 0%, 
+                rgba(180, 100, 100, 0.8) 50%, 
+                transparent 100%);
+            border-radius: 2px;
+        }
+
+        /* Estado de habla */
+        .mouth.hablando {
+            height: 35px;
+            background: linear-gradient(to bottom, 
+                #922b21 0%, 
+                #641e16 40%, 
+                #4a1410 100%);
+            border-radius: 30% / 50%;
+            animation: hablar 0.3s infinite alternate, mouthTalk 4s ease-in-out infinite;
+        }
+
+        /* Químicos flotantes */
+        .chemical {
+            position: absolute;
+            font-size: 24px;
+            font-weight: bold;
+            opacity: 0.8;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .chemical:nth-child(1) {
+            top: 50px;
+            left: 20px;
+            color: #3498db;
+            animation-delay: 0s;
+        }
+
+        .chemical:nth-child(2) {
+            top: 100px;
+            right: 20px;
+            color: #e74c3c;
+            animation-delay: 2s;
+        }
+
+        .chemical:nth-child(3) {
+            bottom: 100px;
+            left: 30px;
+            color: #2ecc71;
+            animation-delay: 4s;
+        }
+
+        .chemical:nth-child(4) {
+            bottom: 50px;
+            right: 30px;
+            color: #f39c12;
+            animation-delay: 6s;
+        }
+
+        /* Título */
+        .title {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #2c3e50;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            animation: titlePulse 3s ease-in-out infinite;
+        }
+
+        /* Globo de información */
+        #globo-info {
+            position: absolute;
+            top: -140px;
+            left: 50%;
+            transform: translateX(-50%);
+            min-width: 320px;
+            max-width: 400px;
+            background: white;
+            border-radius: 20px;
+            padding: 20px 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            font-size: 14px;
+            text-align: left;
+            opacity: 0;
+            transform: translateX(-50%) translateY(-20px);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 10;
+            border: 3px solid #e0e0e0;
+        }
+
+        #globo-info::before,
+        #globo-info::after {
+            content: '';
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            border: 3px solid #e0e0e0;
+        }
+        
+        #globo-info::before {
+            width: 20px;
+            height: 20px;
+            bottom: -12px;
+            left: 30px;
+        }
+        
+        #globo-info::after {
+            width: 15px;
+            height: 15px;
+            bottom: -18px;
+            left: 50px;
+        }
+
+        #globo-info.visible {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .info-row { 
+            margin: 10px 0; 
+            display: flex;
+            align-items: center;
+        }
+        .info-title { 
+            font-weight: bold; 
+            color: #2563eb;
+            min-width: 140px;
+            margin-right: 8px;
+        }
+        .info-value {
+            color: #1f2937;
+            flex: 1;
+        }
+        .info-ok { color:#065f46; }
+        .info-err { color:#dc2626; }
+
+        /* Animaciones optimizadas */
+        @keyframes hairFloat {
+            0%, 100% { transform: translateX(-50%) translateY(0px); }
+            50% { transform: translateX(-50%) translateY(-2px); }
+        }
+
+        @keyframes hairWave {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(3deg); }
+        }
+
+        @keyframes faceBreath {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.01); }
+        }
+
+        @keyframes eyeMove {
+            0%, 100% { transform: translate(-50%, -50%); }
+        }
+
+        @keyframes mouthTalk {
+            0%, 100% { border-radius: 0 0 40px 40px; height: 22px; }
+            50% { border-radius: 20px; height: 25px; }
+        }
+
+        @keyframes hablar {
+            from { height: 25px; }
+            to { height: 35px; }
+        }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0px);
+                opacity: 0.6;
+            }
+            50% { 
+                transform: translateY(-8px);
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes titlePulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes listening-pulse {
+            0%, 100% { 
+                transform: scale(1); 
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            }
+            50% { 
+                transform: scale(1.1); 
+                box-shadow: 0 12px 35px rgba(46, 204, 113, 0.5);
+            }
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        /* Efectos hover */
+        .einstein-container:hover .chemical {
+            animation-duration: 2s;
+            opacity: 1;
+        }
+
+        .einstein-container:hover .eyebrow {
+            animation-duration: 1s;
+        }
+
+        .einstein-container:hover .mouth {
+            animation-duration: 1s;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .controls {
+                bottom: -60px;
+                gap: 15px;
+            }
+            
+            .control-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+            
+            #cara-container {
+                width: 250px;
+                height: 320px;
+            }
+            
+            .einstein-container {
+                width: 250px;
+                height: 320px;
+            }
+            
+            .hair {
+                width: 180px;
+                height: 100px;
+                top: 12px;
+            }
+            
+            .face {
+                width: 140px;
+                height: 180px;
+                top: 65px;
+            }
+        }
+    .escudo {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 180px;
+      height: 180px;
+      animation: girar 5s linear infinite;
+    }
+
+    .izquierda {
+      left: 90px;
+    }
+
+    .derecha {
+      right: 90px;
+    }
+
+    @keyframes girar {
+      from {
+        transform: translateY(-50%) rotateY(0deg);
+      }
+      to {
+        transform: translateY(-50%) rotateY(360deg);
+      }
+    }
+    </style>
+</head>
+<body>
+    <h1>🔬 Luis Aberto Sanchez 🔬</h1>
+    <img src="School LAS.png" alt="Escudo Colegio" class="escudo izquierda">
+    <img src="School LAS.png" alt="Escudo Colegio" class="escudo derecha">
+
+
+    <div class="main-container">
+        <!-- Contenedor de Einstein -->
+        <div id="cara-container">
+            <div id="globo-info"></div>
+            <div class="einstein-container">
+                <!-- Elementos químicos flotantes -->
+                <div class="chemical">H₂O</div>
+                <div class="chemical">CO₂</div>
+                <div class="chemical">NaCl</div>
+                <div class="chemical">O₂</div>
+                
+                <!-- Cabello -->
+                <div class="hair">
+                    <!-- Textura del cabello -->
+                    <div class="hair-texture"></div>
+                    
+                    <!-- Solo mechones principales -->
+                    <div class="hair-strand strand-1"></div>
+                    <div class="hair-strand strand-2"></div>
+                    <div class="hair-strand strand-3"></div>
+                    <div class="hair-strand strand-4"></div>
+                </div>
+                
+                <!-- Cara -->
+                <div class="face">
+                    <!-- Arrugas -->
+                    <div class="wrinkles">
+                        <div class="wrinkle wrinkle-1"></div>
+                        <div class="wrinkle wrinkle-2"></div>
+                        <div class="wrinkle wrinkle-3"></div>
+                        <div class="wrinkle wrinkle-4"></div>
+                    </div>
+                    
+                    <!-- Ojos -->
+                    <div class="eye eye-left">
+                        <div class="eyelashes"></div>
+                        <div class="pupil"></div>
+                    </div>
+                    <div class="eye eye-right">
+                        <div class="eyelashes"></div>
+                        <div class="pupil"></div>
+                    </div>
+                    
+                    <!-- Cejas -->
+                    <div class="eyebrow eyebrow-left"></div>
+                    <div class="eyebrow eyebrow-right"></div>
+                    
+                    <!-- Nariz -->
+                    <div class="nose">
+                        <div class="nostril nostril-left"></div>
+                        <div class="nostril nostril-right"></div>
+                    </div>
+                    
+                    <!-- Bigote -->
+                    <div class="mustache">
+                        <div class="mustache-texture"></div>
+                    </div>
+                    
+                    <!-- Boca -->
+                    <div class="mouth" id="boca"></div>
+                </div>
+                
+                <!-- Título -->
+                <div class="title">Asistente de<br>Elementos Químicos</div>
+            </div>
+
+            <!-- Controles -->
+            <div class="controls">
+                <button class="control-btn start-btn" id="btn-iniciar" data-tooltip="Iniciar conversación">
+                    🎬
+                    <div class="status-indicator status-ready"></div>
+                </button>
+                <button class="control-btn mic-btn" id="btn-microfono" data-tooltip="Hablar ahora" disabled>
+                    🎤
+                    <div class="status-indicator"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ELEMENTOS EXPANDIDOS con más variaciones para mejor reconocimiento
+       const ELEMENTOS =  {
+            "hidrogeno":   { quechua: "Idruhinu", simbolo: "H", numero: 1, masa: "1.008" },
+            "helio":       { quechua: "Illiw", simbolo: "He", numero: 2, masa: "4.0026" },
+            "litio":       { quechua: "Rumiyuq", simbolo: "Li", numero: 3, masa: "6.94" },
+            "berilio":     { quechua: "Biriliyu", simbolo: "Be", numero: 4, masa: "9.0122" },
+            "boro":        { quechua: "Buru", simbolo: "B", numero: 5, masa: "10.81" },
+            "carbono":     { quechua: "k'illimsayaq", simbolo: "C", numero: 6, masa: "12.011" },
+            "nitrogeno":   { quechua: "chhukwi", simbolo: "N", numero: 7, masa: "14.007" },
+            "oxigeno":     { quechua: "Wayrasamay", simbolo: "O", numero: 8, masa: "15.999" },
+            "fluor":       { quechua: "Flur", simbolo: "F", numero: 9, masa: "18.998" },
+            "neon":        { quechua: "Niyun", simbolo: "Ne", numero: 10, masa: "20.180" },
+            "sodio":       { quechua: "Natriyu", simbolo: "Na", numero: 11, masa: "22.990" },
+            "magnesio":    { quechua: "Qunta", simbolo: "Mg", numero: 12, masa: "24.305" },
+            "aluminio":    { quechua: "Aluminiyu", simbolo: "Al", numero: 13, masa: "26.982" },
+            "silicio":     { quechua: "Silisiyu", simbolo: "Si", numero: 14, masa: "28.085" },
+            "fosforo":     { quechua: "Fusfuru", simbolo: "P", numero: 15, masa: "30.974" },
+            "azufre":      { quechua: "Salliy", simbolo: "S", numero: 16, masa: "32.06" },
+            "cloro":       { quechua: "Kluru", simbolo: "Cl", numero: 17, masa: "35.45" },
+            "argon":       { quechua: "Arkun", simbolo: "Ar", numero: 18, masa: "39.948" },
+            "potasio":     { quechua: "Putasiyu", simbolo: "K", numero: 19, masa: "39.098" },
+            "calcio":      { quechua: "Iskuya", simbolo: "Ca", numero: 20, masa: "40.078" },
+            "escandio":    { quechua: "Iskandiyu", simbolo: "Sc", numero: 21, masa: "44.956" },
+            "titanio":     { quechua: "Titaniyu", simbolo: "Ti", numero: 22, masa: "47.867" },
+            "vanadio":     { quechua: "Vanadiyu", simbolo: "V", numero: 23, masa: "50.942" },
+            "cromo":       { quechua: "Krumu", simbolo: "Cr", numero: 24, masa: "51.996" },
+            "manganeso":   { quechua: "Mankanisu", simbolo: "Mn", numero: 25, masa: "54.938" },
+            "hierro":      { quechua: "Q'illay", simbolo: "Fe", numero: 26, masa: "55.845" },
+            "cobalto":     { quechua: "Ankasi", simbolo: "Co", numero: 27, masa: "58.933" },
+            "niquel":      { quechua: "Nikil", simbolo: "Ni", numero: 28, masa: "58.693" },
+            "cobre":       { quechua: "Anta", simbolo: "Cu", numero: 29, masa: "63.546" },
+            "zinc":        { quechua: "Sink", simbolo: "Zn", numero: 30, masa: "65.38" },
+            "galio":       { quechua: "Galiu", simbolo: "Ga", numero: 31, masa: "69.723" },
+            "germanio":    { quechua: "Hirmaniyu", simbolo: "Ge", numero: 32, masa: "72.630" },
+            "arsenico":    { quechua: "Arsiniku", simbolo: "As", numero: 33, masa: "74.922" },
+            "selenio":     { quechua: "Siliniyu", simbolo: "Se", numero: 34, masa: "78.971" },
+            "bromo":       { quechua: "Brumu", simbolo: "Br", numero: 35, masa: "79.904" },
+            "kripton":     { quechua: "Kripton", simbolo: "Kr", numero: 36, masa: "83.798" },
+            "rubidio":     { quechua: "Rupidiyu", simbolo: "Rb", numero: 37, masa: "85.468" },
+            "estroncio":   { quechua: "Istrunsiyu", simbolo: "Sr", numero: 38, masa: "87.62" },
+            "itrio":       { quechua: "Itriyu", simbolo: "Y", numero: 39, masa: "88.906" },
+            "circonio":    { quechua: "Sircunio", simbolo: "Zr", numero: 40, masa: "91.224" },
+            "niobio":      { quechua: "Niyubiyu", simbolo: "Nb", numero: 41, masa: "92.906" },
+            "molibdeno":   { quechua: "Muliptiniyu", simbolo: "Mo", numero: 42, masa: "95.95" },
+            "tecnecio":    { quechua: "Tiknisiyu", simbolo: "Tc", numero: 43, masa: "98" },
+            "rutenio":     { quechua: "Ruthiniyu", simbolo: "Ru", numero: 44, masa: "101.07" },
+            "rodio":       { quechua: "Rutiyu", simbolo: "Rh", numero: 45, masa: "102.91" },
+            "paladio":     { quechua: "Qullqiya", simbolo: "Pd", numero: 46, masa: "106.42" },
+            "plata":       { quechua: "Qullqi", simbolo: "Ag", numero: 47, masa: "107.868" },
+            "cadmio":      { quechua: "Kadmiyu", simbolo: "Cd", numero: 48, masa: "112.41" },
+            "indio":       { quechua: "Indiyu", simbolo: "In", numero: 49, masa: "114.82" },
+            "estaño":      { quechua: "Chayanta", simbolo: "Sn", numero: 50, masa: "118.71" },
+            "antimonio":   { quechua: "Hanku", simbolo: "Sb", numero: 51, masa: "121.76" },
+            "telurio":     { quechua: "Tiluriyu", simbolo: "Te", numero: 52, masa: "127.60" },
+            "yodo":        { quechua: "Yudu", simbolo: "I", numero: 53, masa: "126.90" },
+            "xenon":       { quechua: "Sinun", simbolo: "Xe", numero: 54, masa: "131.29" },
+            "cesio":       { quechua: "Sisiyu", simbolo: "Cs", numero: 55, masa: "132.91" },
+            "bario":       { quechua: "Bariyu", simbolo: "Ba", numero: 56, masa: "137.33" },
+            "lantano":     { quechua: "Lanthanu", simbolo: "La", numero: 57, masa: "138.91" },
+            "cerio":       { quechua: "Siriyu", simbolo: "Ce", numero: 58, masa: "140.12" },
+            "praseodimio": { quechua: "Prasiyudimiyu", simbolo: "Pr", numero: 59, masa: "140.91" },
+            "neodimio":    { quechua: "Neodimiyu", simbolo: "Nd", numero: 60, masa: "144.24" },
+            "prometio":    { quechua: "Prumithiyu", simbolo: "Pm", numero: 61, masa: "145" },
+            "samario":     { quechua: "Samariyu", simbolo: "Sm", numero: 62, masa: "150.36" },
+            "europio":     { quechua: "Eyurupiyu", simbolo: "Eu", numero: 63, masa: "151.96" },
+            "gadolinio":   { quechua: "Gaduliniyu", simbolo: "Gd", numero: 64, masa: "157.25" },
+            "terbio":      { quechua: "Tirbiyu", simbolo: "Tb", numero: 65, masa: "158.93" },
+            "disprosio":   { quechua: "Disprusiyu", simbolo: "Dy", numero: 66, masa: "162.50" },
+            "holmio":      { quechua: "Ulmiyu", simbolo: "Ho", numero: 67, masa: "164.93" },
+            "erbio":       { quechua: "Irbiyu", simbolo: "Er", numero: 68, masa: "167.26" },
+            "tulio":       { quechua: "Thuliyu", simbolo: "Tm", numero: 69, masa: "168.93" },
+            "iterbio":     { quechua: "Itirbiyu", simbolo: "Yb", numero: 70, masa: "173.05" },
+            "lutecio":     { quechua: "Lutisiyu", simbolo: "Lu", numero: 71, masa: "174.97" },
+            "hafnio":      { quechua: "Hafniyu", simbolo: "Hf", numero: 72, masa: "178.49" },
+            "tantalio":    { quechua: "Tantaliyu", simbolo: "Ta", numero: 73, masa: "180.95" },
+            "wolframio":   { quechua: "Wulframiyu", simbolo: "W", numero: 74, masa: "183.84" },
+            "renio":       { quechua: "Riniyu", simbolo: "Re", numero: 75, masa: "186.21" },
+            "osmio":       { quechua: "Usmiyu", simbolo: "Os", numero: 76, masa: "190.23" },
+            "iridio":      { quechua: "iritdiyu", simbolo: "Ir", numero: 77, masa: "192.22" },
+            "platino":     { quechua: "Paladiyu", simbolo: "Pt", numero: 78, masa: "195.08" },
+            "oro":         { quechua: "Quri", simbolo: "Au", numero: 79, masa: "196.97" },
+            "mercurio":    { quechua: "Qatuylla", simbolo: "Hg", numero: 80, masa: "200.59" },
+            "talio":       { quechua: "Thaliyu", simbolo: "Tl", numero: 81, masa: "204.38" },
+            "plomo":       { quechua: "T'iti", simbolo: "Pb", numero: 82, masa: "207.2" },
+            "bismuto":     { quechua: "Bismutu", simbolo: "Bi", numero: 83, masa: "208.98" },
+            "polonio":     { quechua: "Puluniyu", simbolo: "Po", numero: 84, masa: "209" },
+            "astato":      { quechua: "Astatu", simbolo: "At", numero: 85, masa: "210" },
+            "radon":       { quechua: "Radun", simbolo: "Rn", numero: 86, masa: "222" },
+            "francio":     { quechua: "Fransiyu", simbolo: "Fr", numero: 87, masa: "223" },
+            "radio":       { quechua: "Radiyu", simbolo: "Ra", numero: 88, masa: "226" },
+            "actinio":     { quechua: "Aktiniyu", simbolo: "Ac", numero: 89, masa: "227" },
+            "torio":       { quechua: "Thuriyu", simbolo: "Th", numero: 90, masa: "232.04" },
+            "protactinio": { quechua: "Prutaktiniyu", simbolo: "Pa", numero: 91, masa: "231.04" },
+            "uranio":      { quechua: "Uraniyu", simbolo: "U", numero: 92, masa: "238.03" },
+            "neptunio":    { quechua: "Niptuniyu", simbolo: "Np", numero: 93, masa: "237" },
+            "plutonio":    { quechua: "Plutuniyu", simbolo: "Pu", numero: 94, masa: "244" },
+            "americio":    { quechua: "Amirisiyu", simbolo: "Am", numero: 95, masa: "243" },
+            "curio":       { quechua: "Kuriyu", simbolo: "Cm", numero: 96, masa: "247" },
+            "berkelio":    { quechua: "Birkiliyu", simbolo: "Bk", numero: 97, masa: "247" },
+            "californio":  { quechua: "Kalifurniyu", simbolo: "Cf", numero: 98, masa: "251" },
+            "einsteinio":  { quechua: "Instiniyu", simbolo: "Es", numero: 99, masa: "252" },
+            "fermio":      { quechua: "Firmiyu", simbolo: "Fm", numero: 100, masa: "257" },
+            "mendelevio":  { quechua: "Mindiliviyu", simbolo: "Md", numero: 101, masa: "258" },
+            "nobelio":     { quechua: "Nubiliyu", simbolo: "No", numero: 102, masa: "259" },
+            "lawrencio":   { quechua: "Lawrinsiyu", simbolo: "Lr", numero: 103, masa: "266" },
+            "rutherfordio":{ quechua: "Ruthirfurdiyu", simbolo: "Rf", numero: 104, masa: "267" },
+            "dubnio":      { quechua: "Dubniyu", simbolo: "Db", numero: 105, masa: "268" },
+            "seaborgio":   { quechua: "Siyaburhiyu", simbolo: "Sg", numero: 106, masa: "269" },
+            "bohrio":      { quechua: "Buriyu", simbolo: "Bh", numero: 107, masa: "270" },
+            "hassio":      { quechua: "Asiyu", simbolo: "Hs", numero: 108, masa: "277" },
+            "meitnerio":   { quechua: "Mitniriyu", simbolo: "Mt", numero: 109, masa: "278" },
+            "darmstadtio": { quechua: "Darmstatiyu", simbolo: "Ds", numero: 110, masa: "281" },
+            "roentgenio":  { quechua: "Ruyinthiniyu", simbolo: "Rg", numero: 111, masa: "282" },
+            "copernicio":  { quechua: "Kupirnisiyu", simbolo: "Cn", numero: 112, masa: "285" },
+            "nihonio":     { quechua: "Nihuniyu", simbolo: "Nh", numero: 113, masa: "286" },
+            "flerovio":    { quechua: "Flirupiyu", simbolo: "Fl", numero: 114, masa: "289" },
+            "moscovio":    { quechua: "Muskuviyu", simbolo: "Mc", numero: 115, masa: "290" },
+            "livermorio":  { quechua: "Lipirmuniyu", simbolo: "Lv", numero: 116, masa: "293" },
+            "teneso":      { quechua: "Tinisiyu", simbolo: "Ts", numero: 117, masa: "294" },
+            "oganeson":    { quechua: "Ukanisun", simbolo: "Og", numero: 118, masa: "294" }
+        };
+
+        const STOPWORDS = new Set([
+            "el", "la", "los", "las", "un", "una", "del", "de", "al", "que", "es", "se", "por", "favor", 
+            "dime", "di", "quiero", "saber", "sobre", "elemento", "elmento", "como", "cual", "cuál",
+            "dice", "llama", "nombre", "significa", "me", "puedes", "decir", "hablar", "informacion",
+            "información", "datos", "acerca", "respecto", "en", "y", "o", "pero", "también", "tambien"
+        ]);
+
+        let modo = "esperando";
+        let sesionActiva = false;
+        let escuchandoMicrofono = false;
+        let reconocimiento = null;
+        let permisosMicrofono = false;
+
+        const globoInfo = document.getElementById('globo-info');
+        const boca = document.getElementById('boca');
+        const einsteinContainer = document.querySelector('.einstein-container');
+        const eyes = document.querySelectorAll('.pupil');
+        const btnIniciar = document.getElementById('btn-iniciar');
+        const btnMicrofono = document.getElementById('btn-microfono');
+
+        // CORREGIDO: Solicitar permisos del micrófono explícitamente
+        async function solicitarPermisosMicrofono() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                stream.getTracks().forEach(track => track.stop()); // Cerrar stream inmediatamente
+                permisosMicrofono = true;
+                return true;
+            } catch (error) {
+                console.error('Error al solicitar permisos del micrófono:', error);
+                permisosMicrofono = false;
+                return false;
+            }
+        }
+
+        // Funciones auxiliares mejoradas
+        function normalizar(txt) {
+            return txt
+                .toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .replace(/[.,;:!?¿¡()"']/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
+
+        function limpiarStopwords(frase) {
+            const palabras = frase.split(' ').filter(w => w.length > 1 && !STOPWORDS.has(w));
+            return palabras.join(' ').trim();
+        }
+
+        // MEJORADO: Algoritmo de búsqueda más inteligente con puntuación de similitud
+        function calcularSimilitud(str1, str2) {
+            const len1 = str1.length;
+            const len2 = str2.length;
+            const matrix = [];
+
+            if (len1 === 0) return len2;
+            if (len2 === 0) return len1;
+
+            for (let i = 0; i <= len1; i++) {
+                matrix[i] = [i];
+            }
+
+            for (let j = 0; j <= len2; j++) {
+                matrix[0][j] = j;
+            }
+
+            for (let i = 1; i <= len1; i++) {
+                for (let j = 1; j <= len2; j++) {
+                    const cost = str1.charAt(i - 1) === str2.charAt(j - 1) ? 0 : 1;
+                    matrix[i][j] = Math.min(
+                        matrix[i - 1][j] + 1,
+                        matrix[i][j - 1] + 1,
+                        matrix[i - 1][j - 1] + cost
+                    );
+                }
+            }
+
+            return matrix[len1][len2];
+        }
+
+        function calcularPorcentajeSimilitud(str1, str2) {
+            const distancia = calcularSimilitud(str1, str2);
+            const maxLen = Math.max(str1.length, str2.length);
+            return maxLen === 0 ? 100 : ((maxLen - distancia) / maxLen) * 100;
+        }
+
+        // MEJORADO: Función de búsqueda con múltiples estrategias
+        function buscarElemento(fraseLimpia) {
+            console.log('Buscando elemento en:', fraseLimpia);
+            let mejorCoincidencia = null;
+            let mejorPuntuacion = 0;
+
+            // Estrategia 1: Búsqueda exacta en nombre principal
+            if (ELEMENTOS[fraseLimpia]) {
+                return { clave: fraseLimpia, data: ELEMENTOS[fraseLimpia], metodo: 'exacto' };
+            }
+
+            // Estrategia 2: Búsqueda en variaciones exactas
+            for (const [clave, data] of Object.entries(ELEMENTOS)) {
+                if (data.variaciones && data.variaciones.includes(fraseLimpia)) {
+                    return { clave, data, metodo: 'variacion_exacta' };
+                }
+            }
+
+            // Estrategia 3: Búsqueda por contención (palabra completa dentro de la frase)
+            const palabrasFrase = fraseLimpia.split(' ');
+            for (const [clave, data] of Object.entries(ELEMENTOS)) {
+                // Verificar si alguna palabra de la frase es exactamente el elemento
+                if (palabrasFrase.includes(clave)) {
+                    return { clave, data, metodo: 'contencion_exacta' };
+                }
+                
+                // Verificar variaciones
+                if (data.variaciones) {
+                    for (const variacion of data.variaciones) {
+                        if (palabrasFrase.includes(variacion)) {
+                            return { clave, data, metodo: 'variacion_contenida' };
+                        }
+                    }
+                }
+            }
+
+            // Estrategia 4: Búsqueda por símbolos químicos
+            for (const [clave, data] of Object.entries(ELEMENTOS)) {
+                if (fraseLimpia.includes(data.simbolo.toLowerCase()) || 
+                    palabrasFrase.includes(data.simbolo.toLowerCase())) {
+                    return { clave, data, metodo: 'simbolo' };
+                }
+            }
+
+            // Estrategia 5: Búsqueda difusa con similitud (solo si no encontramos nada exacto)
+            for (const [clave, data] of Object.entries(ELEMENTOS)) {
+                // Comparar con el nombre principal
+                const similitudNombre = calcularPorcentajeSimilitud(fraseLimpia, clave);
+                if (similitudNombre > mejorPuntuacion) {
+                    mejorPuntuacion = similitudNombre;
+                    mejorCoincidencia = { clave, data, metodo: 'similitud_nombre', puntuacion: similitudNombre };
+                }
+
+                // Comparar con variaciones
+                if (data.variaciones) {
+                    for (const variacion of data.variaciones) {
+                        const similitudVar = calcularPorcentajeSimilitud(fraseLimpia, variacion);
+                        if (similitudVar > mejorPuntuacion) {
+                            mejorPuntuacion = similitudVar;
+                            mejorCoincidencia = { clave, data, metodo: 'similitud_variacion', puntuacion: similitudVar };
+                        }
+                    }
+                }
+
+                // Comparar palabras individuales con mayor tolerancia
+                for (const palabra of palabrasFrase) {
+                    if (palabra.length >= 3) { // Solo palabras de 3+ caracteres
+                        const similitudPalabra = calcularPorcentajeSimilitud(palabra, clave);
+                        if (similitudPalabra > mejorPuntuacion) {
+                            mejorPuntuacion = similitudPalabra;
+                            mejorCoincidencia = { clave, data, metodo: 'similitud_palabra', puntuacion: similitudPalabra };
+                        }
+
+                        if (data.variaciones) {
+                            for (const variacion of data.variaciones) {
+                                const similitudVarPalabra = calcularPorcentajeSimilitud(palabra, variacion);
+                                if (similitudVarPalabra > mejorPuntuacion) {
+                                    mejorPuntuacion = similitudVarPalabra;
+                                    mejorCoincidencia = { clave, data, metodo: 'similitud_var_palabra', puntuacion: similitudVarPalabra };
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Solo aceptar coincidencias con al menos 70% de similitud
+            if (mejorCoincidencia && mejorPuntuacion >= 70) {
+                console.log(`Elemento encontrado por ${mejorCoincidencia.metodo} con ${mejorPuntuacion.toFixed(1)}% similitud`);
+                return mejorCoincidencia;
+            }
+
+            console.log(`No se encontró elemento. Mejor puntuación: ${mejorPuntuacion.toFixed(1)}%`);
+            return null;
+        }
+
+        async function hablar(texto, lang="es-PE") {
+            const u = new SpeechSynthesisUtterance(texto);
+            u.lang = lang;
+            u.rate = 0.9;
+            u.pitch = 1.0;
+            u.volume = 0.8;
+            
+            speechSynthesis.cancel();
+            
+            boca.classList.add('hablando');
+            actualizarEstadoBotones('speaking');
+
+            speechSynthesis.speak(u);
+            return new Promise(res => {
+                u.onend = () => {
+                    boca.classList.remove('hablando');
+                    actualizarEstadoBotones(sesionActiva ? 'ready' : 'waiting');
+                    res();
+                };
+                u.onerror = () => {
+                    boca.classList.remove('hablando');
+                    actualizarEstadoBotones(sesionActiva ? 'ready' : 'waiting');
+                    res();
+                };
+            });
+        }
+
+        function tieneAPI() {
+            return !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+        }
+
+        // CORREGIDO: Mejor manejo del reconocimiento de voz para móviles
+        function crearRecon() {
+            if (!tieneAPI()) return null;
+            
+            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const r = new SR();
+            r.lang = "es-PE";
+            r.interimResults = false;
+            r.maxAlternatives = 5; // Más alternativas para mejor reconocimiento
+            r.continuous = false;
+            
+            r.onstart = () => {
+                console.log('Reconocimiento iniciado');
+                boca.classList.remove('hablando');
+                actualizarEstadoBotones('listening');
+                escuchandoMicrofono = true;
+            };
+
+            r.onend = () => {
+                console.log('Reconocimiento terminado');
+                actualizarEstadoBotones(sesionActiva ? 'ready' : 'waiting');
+                escuchandoMicrofono = false;
+            };
+
+            r.onerror = (event) => {
+                console.error('Error de reconocimiento:', event.error);
+                let mensajeError = "No te entendí. ";
+                
+                switch(event.error) {
+                    case 'no-speech':
+                        mensajeError = "No escuché nada. ";
+                        break;
+                    case 'audio-capture':
+                        mensajeError = "Problema con el micrófono. ";
+                        break;
+                    case 'not-allowed':
+                        mensajeError = "Necesito permiso para usar el micrófono. ";
+                        break;
+                    case 'network':
+                        mensajeError = "Problema de conexión. ";
+                        break;
+                }
+                
+                const htmlErr = `<div class="info-err">❌ ${mensajeError}</div>`;
+                mostrarGloboInfo(htmlErr);
+                hablar(mensajeError + "Presiona el micrófono para intentarlo de nuevo.");
+                
+                actualizarEstadoBotones(sesionActiva ? 'ready' : 'waiting');
+                escuchandoMicrofono = false;
+            };
+
+            r.onresult = (event) => {
+                const results = event.results[0];
+                console.log('Resultados del reconocimiento:', results);
+                
+                let mejorElemento = null;
+                let mejorPuntuacion = 0;
+                let mejorTextoOriginal = '';
+
+                // MEJORADO: Probar con todas las alternativas y encontrar la mejor coincidencia
+                for (let i = 0; i < results.length; i++) {
+                    const original = results[i].transcript;
+                    const confianza = results[i].confidence || 0;
+                    console.log(`Alternativa ${i + 1}: "${original}" (confianza: ${confianza})`);
+                    
+                    const limpio = limpiarStopwords(normalizar(original));
+                    console.log(`Texto limpio: "${limpio}"`);
+                    
+                    const encontrado = buscarElemento(limpio);
+                    
+                    if (encontrado) {
+                        // Calcular puntuación combinada: similitud + confianza del reconocimiento
+                        const puntuacionCombinada = (encontrado.puntuacion || 100) * 0.7 + confianza * 100 * 0.3;
+                        
+                        if (puntuacionCombinada > mejorPuntuacion) {
+                            mejorPuntuacion = puntuacionCombinada;
+                            mejorElemento = encontrado;
+                            mejorTextoOriginal = original;
+                        }
+                    }
+                }
+                
+                if (mejorElemento) {
+                    console.log('Mejor elemento encontrado:', mejorElemento);
+                    mostrarElemento(mejorElemento.clave, mejorElemento.data, mejorTextoOriginal);
+                    return;
+                }
+                
+                // Si no se encontró nada en ninguna alternativa
+                const mejorOpcion = results[0].transcript;
+                const elementosDisponibles = Object.keys(ELEMENTOS).slice(0, 10).join(', ');
+                const htmlErr = `<div class="info-err">❌ No encontré: <b>${mejorOpcion}</b><br><br>📝 Ejemplos: ${elementosDisponibles}...<br><br>💡 Tip: Di solo el nombre del elemento claramente</div>`;
+                mostrarGloboInfo(htmlErr);
+                hablar(`No encontré el elemento ${mejorOpcion}. Intenta decir solo el nombre del elemento, por ejemplo: hidrógeno, oxígeno, o carbono.`);
+            };
+
+            return r;
+        }
+
+        function actualizarEstadoBotones(estado) {
+            const statusIniciar = btnIniciar.querySelector('.status-indicator');
+            const statusMicrofono = btnMicrofono.querySelector('.status-indicator');
+
+            // Limpiar clases
+            btnIniciar.classList.remove('active', 'listening');
+            btnMicrofono.classList.remove('active', 'listening');
+            statusIniciar.className = 'status-indicator';
+            statusMicrofono.className = 'status-indicator';
+
+            switch(estado) {
+                case 'waiting':
+                    statusIniciar.classList.add('status-ready');
+                    btnMicrofono.disabled = true;
+                    break;
+                case 'ready':
+                    btnIniciar.classList.add('active');
+                    statusIniciar.classList.add('status-ready');
+                    statusMicrofono.classList.add('status-ready');
+                    btnMicrofono.disabled = false;
+                    break;
+                case 'listening':
+                    if (escuchandoMicrofono) {
+                        btnMicrofono.classList.add('listening');
+                        statusMicrofono.classList.add('status-listening');
+                    }
+                    break;
+                case 'speaking':
+                    statusIniciar.classList.add('status-speaking');
+                    statusMicrofono.classList.add('status-speaking');
+                    break;
+            }
+        }
+
+        // CORREGIDO: Mejor inicialización de la conversación
+        async function iniciarConversacion() {
+            if (!tieneAPI()) {
+                const htmlErr = `<div class="info-err">❌ Tu navegador no soporta reconocimiento de voz</div>`;
+                mostrarGloboInfo(htmlErr);
+                await hablar("Lo siento, tu navegador no soporta reconocimiento de voz.");
+                return;
+            }
+
+            // Solicitar permisos del micrófono primero
+            const permisoOK = await solicitarPermisosMicrofono();
+            if (!permisoOK) {
+                const htmlErr = `<div class="info-err">❌ Necesito permiso para usar el micrófono. Por favor, permite el acceso al micrófono cuando te lo pida el navegador.</div>`;
+                mostrarGloboInfo(htmlErr);
+                await hablar("Necesito permiso para usar el micrófono. Por favor, permite el acceso cuando te lo pida el navegador.");
+                return;
+            }
+
+            sesionActiva = true;
+            modo = "conversacion";
+            
+            await hablar("Hola Albertino, ¿qué elemento de la tabla periódica quieres saber?");
+            
+            // MODIFICADO: Mensaje simplificado sin ejemplos
+            const htmlBienvenida = `<div class="info-ok"><div class="info-row"><span class="info-title">💬 Estado:</span><span class="info-value">Conversación iniciada</span></div><div class="info-row"><span class="info-title">🎤 Instrucción:</span><span class="info-value">Presiona el micrófono y di el nombre de un elemento</span></div></div>`;
+            mostrarGloboInfo(htmlBienvenida);
+        }
+
+        // CORREGIDO: Mejor manejo del micrófono
+        async function escucharElemento() {
+            if (escuchandoMicrofono || !sesionActiva) {
+                console.log('Ya escuchando o sesión no activa');
+                return;
+            }
+
+            if (!permisosMicrofono) {
+                const permisoOK = await solicitarPermisosMicrofono();
+                if (!permisoOK) {
+                    const htmlErr = `<div class="info-err">❌ Necesito permiso para usar el micrófono</div>`;
+                    mostrarGloboInfo(htmlErr);
+                    await hablar("Necesito permiso para usar el micrófono. Permite el acceso cuando te lo pida el navegador.");
+                    return;
+                }
+            }
+
+            reconocimiento = crearRecon();
+            
+            if (!reconocimiento) {
+                escuchandoMicrofono = false;
+                const htmlErr = `<div class="info-err">❌ Error al crear el reconocimiento de voz</div>`;
+                mostrarGloboInfo(htmlErr);
+                await hablar("Error al crear el reconocimiento de voz.");
+                return;
+            }
+
+            try {
+                console.log('Iniciando reconocimiento...');
+                reconocimiento.start();
+                
+                // Timeout de seguridad para móviles
+                setTimeout(() => {
+                    if (escuchandoMicrofono && reconocimiento) {
+                        console.log('Timeout: deteniendo reconocimiento');
+                        try {
+                            reconocimiento.stop();
+                        } catch(e) {
+                            console.error('Error al detener reconocimiento:', e);
+                        }
+                    }
+                }, 10000); // 10 segundos máximo
+                
+            } catch (error) {
+                console.error('Error al iniciar reconocimiento:', error);
+                escuchandoMicrofono = false;
+                actualizarEstadoBotones('ready');
+                const htmlErr = `<div class="info-err">❌ Error al iniciar el micrófono</div>`;
+                mostrarGloboInfo(htmlErr);
+                await hablar("Error al iniciar el micrófono. Inténtalo de nuevo.");
+            }
+        }
+
+        // MODIFICADO: Mostrar elemento con símbolo químico y número atómico
+        function mostrarElemento(clave, el, textoOriginal) {
+            const htmlInfo = `
+                <div class="info-ok">
+                    <div class="info-row">
+                        <span class="info-title">🎙️ Escuché:</span>
+                        <span class="info-value">"${textoOriginal}"</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-title">🔬 Elemento:</span>
+                        <span class="info-value">${capitalizar(clave)}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-title">⚛️ Símbolo:</span>
+                        <span class="info-value"><b>${el.simbolo}</b></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-title">#️⃣ Número atómico:</span>
+                        <span class="info-value">${el.numero}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-title">🗣️ En quechua:</span>
+                        <span class="info-value"><b>${el.quechua}</b></span>
+                    </div>
+                </div>
+            `;
+            mostrarGloboInfo(htmlInfo);
+            
+            // Solo menciona el nombre en quechua
+            hablar(`${capitalizar(clave)} en quechua se dice ${el.quechua}.`).then(() => {
+                hablar("¿Quieres saber otro elemento? Presiona el micrófono para continuar o el botón de inicio para terminar.");
+            });
+        }
+
+        function capitalizar(s) { 
+            return s.charAt(0).toUpperCase() + s.slice(1); 
+        }
+
+        function mostrarGloboInfo(html) {
+            globoInfo.innerHTML = html;
+            globoInfo.classList.add('visible');
+        }
+
+        function ocultarGloboInfo() {
+            globoInfo.classList.remove('visible');
+            setTimeout(() => {
+                globoInfo.innerHTML = '';
+            }, 400);
+        }
+
+        function finalizarConversacion() {
+            sesionActiva = false;
+            escuchandoMicrofono = false;
+            modo = "esperando";
+            
+            if (reconocimiento) {
+                try { 
+                    reconocimiento.stop(); 
+                    reconocimiento = null;
+                } catch(e) {
+                    console.error('Error al detener reconocimiento:', e);
+                }
+            }
+
+            hablar("Tupananchiskama").then(() => {
+                const htmlFinal = `<div class="info-row"><span class="info-title">👋 Hasta luego:</span><span class="info-value"><b>Tupananchiskama</b> (en quechua)</span></div>`;
+                mostrarGloboInfo(htmlFinal);
+                
+                setTimeout(() => {
+                    ocultarGloboInfo();
+                    actualizarEstadoBotones('waiting');
+                }, 3000);
+            });
+        }
+
+        // Event listeners de botones
+        btnIniciar.addEventListener('click', () => {
+            if (!sesionActiva) {
+                iniciarConversacion();
+            } else {
+                finalizarConversacion();
+            }
+        });
+
+        btnMicrofono.addEventListener('click', () => {
+            if (sesionActiva && !escuchandoMicrofono) {
+                escucharElemento();
+            }
+        });
+
+        // Interactividad adicional de Einstein
+        document.addEventListener('mousemove', (e) => {
+            const rect = einsteinContainer.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 3;
+            
+            const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX);
+            const distance = Math.min(3, Math.sqrt(Math.pow(e.clientX - centerX, 2) + Math.pow(e.clientY - centerY, 2)) / 50);
+            
+            eyes.forEach(eye => {
+                const moveX = Math.cos(angle) * distance;
+                const moveY = Math.sin(angle) * distance;
+                eye.style.transform = `translate(${-50 + moveX}%, ${-50 + moveY}%)`;
+            });
+        });
+
+        // Efecto de clic - Einstein "habla"
+        einsteinContainer.addEventListener('click', () => {
+            if (!sesionActiva) {
+                boca.style.animation = 'none';
+                boca.style.borderRadius = '20px';
+                boca.style.height = '30px';
+                
+                setTimeout(() => {
+                    boca.style.animation = 'mouthTalk 4s ease-in-out infinite';
+                }, 200);
+
+                const phrases = [
+                    "¡Presiona el botón verde para comenzar!",
+                    "¡La tabla periódica te espera!",
+                    "¿Listo para aprender química?",
+                    "¡Vamos a explorar los elementos!",
+                    "¡Tengo " + Object.keys(ELEMENTOS).length + " elementos para enseñarte!"
+                ];
+                
+                const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+                hablar(randomPhrase);
+            }
+        });
+
+        // CORREGIDO: Mejor inicialización con mensaje simplificado
+        document.addEventListener('DOMContentLoaded', () => {
+            actualizarEstadoBotones('waiting');
+            
+            // Verificar compatibilidad del navegador
+            if (!tieneAPI()) {
+                setTimeout(() => {
+                    const htmlError = `<div class="info-err"><div class="info-row"><span class="info-title">❌ Error:</span><span class="info-value">Tu navegador no soporta reconocimiento de voz</span></div><div class="info-row"><span class="info-title">💡 Solución:</span><span class="info-value">Usa Chrome, Edge o Safari en lugar de Firefox</span></div></div>`;
+                    mostrarGloboInfo(htmlError);
+                }, 1000);
+                return;
+            }
+            
+            // MODIFICADO: Mensaje inicial simplificado sin base de datos
+            setTimeout(() => {
+                const htmlInicial = `<div class="info-ok"><div class="info-row"><span class="info-title">▶️ Para empezar:</span><span class="info-value">Presiona el botón verde</span></div><div class="info-row"><span class="info-title">🎤 Importante:</span><span class="info-value">Permite el acceso al micrófono cuando te lo pida</span></div></div>`;
+                mostrarGloboInfo(htmlInicial);
+            }, 1000);
+        });
+
+        // CORREGIDO: Detección de dispositivos móviles para mejor UX
+        function esMobile() {
+            return /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        // Mejorar experiencia en móviles
+        if (esMobile()) {
+            document.addEventListener('touchstart', function() {}, {passive: true});
+            
+            // Prevenir zoom en doble tap
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', function (event) {
+                const now = (new Date()).getTime();
+                if (now - lastTouchEnd <= 300) {
+                    event.preventDefault();
+                }
+                lastTouchEnd = now;
+            }, false);
+        }
+
+        // NUEVO: Función de ayuda para mostrar elementos disponibles
+        function mostrarElementosDisponibles() {
+            const elementos = Object.keys(ELEMENTOS);
+            const mitad = Math.ceil(elementos.length / 2);
+            const columna1 = elementos.slice(0, mitad);
+            const columna2 = elementos.slice(mitad);
+            
+            const htmlAyuda = `
+                <div class="info-ok">
+                    <div class="info-row">
+                        <span class="info-title">📋 Elementos disponibles (${elementos.length}):</span>
+                    </div>
+                    <div style="display: flex; gap: 20px; margin-top: 10px;">
+                        <div style="flex: 1;">
+                            ${columna1.map(el => `• ${capitalizar(el)}`).join('<br>')}
+                        </div>
+                        <div style="flex: 1;">
+                            ${columna2.map(el => `• ${capitalizar(el)}`).join('<br>')}
+                        </div>
+                    </div>
+                    <div class="info-row" style="margin-top: 15px;">
+                        <span class="info-title">💡 Tip:</span>
+                        <span class="info-value">Di claramente solo el nombre del elemento</span>
+                    </div>
+                </div>
+            `;
+            
+            mostrarGloboInfo(htmlAyuda);
+            
+            const primerosElementos = elementos.slice(0, 5).join(', ');
+            hablar(`Tengo ${elementos.length} elementos disponibles. Por ejemplo: ${primerosElementos} y muchos más. ¿Cuál quieres saber?`);
+        }
+
+        // NUEVO: Comando especial para mostrar ayuda
+        window.mostrarAyuda = mostrarElementosDisponibles;
+    </script>
+</body>
+</html>
