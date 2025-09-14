@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🔬 Luisito</title>
     <link rel="icon" href="School LAS.png">
-    <style>
+     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             display: flex;
             flex-direction: column;
@@ -16,9 +20,10 @@
             background: 
                 url('ie LAS 2025.png') center/cover no-repeat;
             margin: 0;
-            padding: 32px;
+            padding: clamp(16px, 4vw, 32px);
             text-align: center;
             position: relative;
+            overflow-x: hidden;
         }
 
         body::before {
@@ -38,8 +43,9 @@
             margin-top: 0; 
             color: white;
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            font-size: 2.5rem;
-            margin-bottom: 20px;
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            margin-bottom: clamp(10px, 3vw, 20px);
+            line-height: 1.2;
         }
 
         /* Contenedor principal solo con Einstein */
@@ -47,22 +53,24 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 20px 0;
+            margin: clamp(10px, 3vw, 20px) 0;
+            width: 100%;
         }
 
         /* Contenedor principal de Einstein */
         #cara-container {
             position: relative;
-            width: 300px;
-            height: 400px;
+            width: clamp(200px, 60vw, 300px);
+            height: clamp(270px, 80vw, 400px);
+            max-width: 90vw;
         }
 
         .einstein-container {
             position: relative;
-            width: 300px;
-            height: 400px;
+            width: 100%;
+            height: 100%;
             background: radial-gradient(circle at center, #f8f9fa, #e9ecef);
-            border-radius: 50px;
+            border-radius: clamp(25px, 8vw, 50px);
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             overflow: hidden;
             cursor: pointer;
@@ -76,21 +84,21 @@
         /* Botones de control */
         .controls {
             position: absolute;
-            bottom: -80px;
+            bottom: clamp(-60px, -15vw, -80px);
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 20px;
+            gap: clamp(10px, 4vw, 20px);
             z-index: 20;
         }
 
         .control-btn {
-            width: 60px;
-            height: 60px;
+            width: clamp(40px, 12vw, 60px);
+            height: clamp(40px, 12vw, 60px);
             border-radius: 50%;
             border: none;
             cursor: pointer;
-            font-size: 24px;
+            font-size: clamp(16px, 4vw, 24px);
             color: white;
             background: linear-gradient(45deg, #3498db, #2980b9);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
@@ -143,14 +151,14 @@
         .control-btn::after {
             content: attr(data-tooltip);
             position: absolute;
-            bottom: -35px;
+            bottom: clamp(-25px, -6vw, -35px);
             left: 50%;
             transform: translateX(-50%);
             background: rgba(0, 0, 0, 0.8);
             color: white;
             padding: 5px 10px;
             border-radius: 5px;
-            font-size: 12px;
+            font-size: clamp(10px, 2.5vw, 12px);
             white-space: nowrap;
             opacity: 0;
             transition: opacity 0.3s;
@@ -166,8 +174,8 @@
             position: absolute;
             top: -5px;
             right: -5px;
-            width: 15px;
-            height: 15px;
+            width: clamp(8px, 3vw, 15px);
+            height: clamp(8px, 3vw, 15px);
             border-radius: 50%;
             border: 2px solid white;
         }
@@ -186,14 +194,14 @@
             animation: pulse 0.5s infinite;
         }
 
-        /* Cabello realista - optimizado */
+        /* Cabello realista - optimizado y escalado */
         .hair {
             position: absolute;
-            top: 15px;
+            top: clamp(8px, 4%, 15px);
             left: 50%;
             transform: translateX(-50%);
-            width: 220px;
-            height: 130px;
+            width: 73%;
+            height: 32.5%;
             background: radial-gradient(ellipse at 40% 60%, 
                 #e8e8e8 0%, 
                 #d0d0d0 25%, 
@@ -212,10 +220,10 @@
         .hair::before {
             content: '';
             position: absolute;
-            top: -25px;
-            left: -35px;
-            width: 90px;
-            height: 85px;
+            top: -19%;
+            left: -16%;
+            width: 41%;
+            height: 65%;
             background: radial-gradient(circle at 60% 70%, 
                 #e0e0e0 0%, 
                 #c8c8c8 30%, 
@@ -232,10 +240,10 @@
         .hair::after {
             content: '';
             position: absolute;
-            top: -20px;
-            right: -30px;
-            width: 85px;
-            height: 80px;
+            top: -15%;
+            right: -14%;
+            width: 39%;
+            height: 62%;
             background: radial-gradient(circle at 40% 70%, 
                 #e0e0e0 0%, 
                 #c8c8c8 30%, 
@@ -249,7 +257,7 @@
             transform-origin: bottom left;
         }
 
-        /* Mechones adicionales - reducidos */
+        /* Mechones adicionales - escalados */
         .hair-strand {
             position: absolute;
             background: linear-gradient(135deg, 
@@ -261,37 +269,37 @@
         }
 
         .strand-1 {
-            top: -15px;
-            left: 20px;
-            width: 25px;
-            height: 60px;
+            top: -11.5%;
+            left: 9%;
+            width: 11.4%;
+            height: 46%;
             transform: rotate(-25deg);
             animation: hairWave 8s ease-in-out infinite;
         }
 
         .strand-2 {
-            top: -20px;
-            left: 50px;
-            width: 20px;
-            height: 70px;
+            top: -15.4%;
+            left: 23%;
+            width: 9.1%;
+            height: 54%;
             transform: rotate(-10deg);
             animation: hairWave 7s ease-in-out infinite reverse;
         }
 
         .strand-3 {
-            top: -18px;
-            right: 45px;
-            width: 22px;
-            height: 65px;
+            top: -13.8%;
+            right: 20.5%;
+            width: 10%;
+            height: 50%;
             transform: rotate(15deg);
             animation: hairWave 9s ease-in-out infinite;
         }
 
         .strand-4 {
-            top: -12px;
-            right: 20px;
-            width: 28px;
-            height: 55px;
+            top: -9.2%;
+            right: 9%;
+            width: 12.7%;
+            height: 42%;
             transform: rotate(30deg);
             animation: hairWave 6s ease-in-out infinite reverse;
         }
@@ -329,14 +337,14 @@
             pointer-events: none;
         }
 
-        /* Cara */
+        /* Cara escalada */
         .face {
             position: absolute;
-            top: 80px;
+            top: 20%;
             left: 50%;
             transform: translateX(-50%);
-            width: 180px;
-            height: 220px;
+            width: 60%;
+            height: 55%;
             background: radial-gradient(ellipse at 30% 30%, #fdd5c7 0%, #f4b8aa 35%, #e8a694 65%, #d49584 100%);
             border-radius: 90px 90px 100px 100px;
             animation: faceBreath 8s ease-in-out infinite;
@@ -346,14 +354,14 @@
                 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
-        /* Mejillas */
+        /* Mejillas escaladas */
         .face::before {
             content: '';
             position: absolute;
-            top: 70px;
-            left: 25px;
-            width: 25px;
-            height: 25px;
+            top: 32%;
+            left: 14%;
+            width: 14%;
+            height: 11.4%;
             background: radial-gradient(circle, rgba(240, 128, 128, 0.4) 0%, transparent 70%);
             border-radius: 50%;
         }
@@ -361,15 +369,15 @@
         .face::after {
             content: '';
             position: absolute;
-            top: 70px;
-            right: 25px;
-            width: 25px;
-            height: 25px;
+            top: 32%;
+            right: 14%;
+            width: 14%;
+            height: 11.4%;
             background: radial-gradient(circle, rgba(240, 128, 128, 0.4) 0%, transparent 70%);
             border-radius: 50%;
         }
 
-        /* Arrugas */
+        /* Arrugas escaladas */
         .wrinkles {
             position: absolute;
             top: 0;
@@ -386,41 +394,41 @@
         }
 
         .wrinkle-1 {
-            top: 45px;
-            left: 30px;
-            width: 30px;
+            top: 20.5%;
+            left: 17%;
+            width: 17%;
             transform: rotate(-15deg);
         }
 
         .wrinkle-2 {
-            top: 48px;
-            right: 30px;
-            width: 30px;
+            top: 22%;
+            right: 17%;
+            width: 17%;
             transform: rotate(15deg);
         }
 
         .wrinkle-3 {
-            top: 140px;
-            left: 40px;
-            width: 25px;
+            top: 64%;
+            left: 22%;
+            width: 14%;
             transform: rotate(10deg);
         }
 
         .wrinkle-4 {
-            top: 140px;
-            right: 40px;
-            width: 25px;
+            top: 64%;
+            right: 22%;
+            width: 14%;
             transform: rotate(-10deg);
         }
 
-        /* Ojos */
+        /* Ojos escalados */
         .eye {
             position: absolute;
-            width: 28px;
-            height: 18px;
+            width: 15.6%;
+            height: 8.2%;
             background: linear-gradient(to bottom, #ffffff 0%, #f8f8f8 100%);
             border-radius: 50%;
-            top: 58px;
+            top: 26.4%;
             overflow: hidden;
             box-shadow: 
                 inset 0 -2px 4px rgba(0, 0, 0, 0.1),
@@ -430,26 +438,26 @@
         .eye::before {
             content: '';
             position: absolute;
-            top: -2px;
+            top: -11%;
             left: 0;
             right: 0;
-            height: 8px;
+            height: 44%;
             background: linear-gradient(to bottom, rgba(220, 180, 160, 0.6), transparent);
             border-radius: 50% 50% 0 0;
         }
 
         .eye-left {
-            left: 42px;
+            left: 23.3%;
         }
 
         .eye-right {
-            right: 42px;
+            right: 23.3%;
         }
 
         .pupil {
             position: absolute;
-            width: 12px;
-            height: 12px;
+            width: 43%;
+            height: 67%;
             background: radial-gradient(circle at 30% 30%, #4a5568 0%, #2d3748 40%, #1a202c 100%);
             border-radius: 50%;
             top: 50%;
@@ -462,22 +470,22 @@
         .pupil::after {
             content: '';
             position: absolute;
-            width: 3px;
-            height: 3px;
+            width: 25%;
+            height: 25%;
             background: radial-gradient(circle, #ffffff 0%, rgba(255, 255, 255, 0.8) 100%);
             border-radius: 50%;
-            top: 2px;
-            left: 3px;
+            top: 17%;
+            left: 25%;
             box-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
         }
 
         /* Pestañas */
         .eyelashes {
             position: absolute;
-            top: -2px;
+            top: -11%;
             left: 0;
             right: 0;
-            height: 6px;
+            height: 33%;
             background: linear-gradient(90deg, 
                 transparent 10%, 
                 rgba(100, 100, 100, 0.8) 15%, 
@@ -497,11 +505,11 @@
                 transparent 90%);
         }
 
-        /* Cejas más realistas - optimizadas */
+        /* Cejas más realistas - escaladas */
         .eyebrow {
             position: absolute;
-            width: 40px;
-            height: 12px;
+            width: 22.2%;
+            height: 5.5%;
             background: linear-gradient(45deg, 
                 #b8b8b8 0%, 
                 #d0d0d0 25%, 
@@ -509,7 +517,7 @@
                 #d4d4d4 75%, 
                 #b8b8b8 100%);
             border-radius: 6px;
-            top: 42px;
+            top: 19%;
             box-shadow: 
                 0 1px 2px rgba(0, 0, 0, 0.2),
                 inset 0 1px 1px rgba(255, 255, 255, 0.3);
@@ -533,23 +541,23 @@
         }
 
         .eyebrow-left {
-            left: 38px;
+            left: 21.1%;
             transform: rotate(-8deg);
         }
 
         .eyebrow-right {
-            right: 38px;
+            right: 21.1%;
             transform: rotate(8deg);
         }
 
-        /* Bigote más realista - optimizado */
+        /* Bigote más realista - escalado */
         .mustache {
             position: absolute;
-            top: 118px;
+            top: 53.6%;
             left: 50%;
             transform: translateX(-50%);
-            width: 65px;
-            height: 25px;
+            width: 36.1%;
+            height: 11.4%;
             background: linear-gradient(to bottom, 
                 #d8d8d8 0%, 
                 #c0c0c0 30%, 
@@ -564,10 +572,10 @@
         .mustache::before {
             content: '';
             position: absolute;
-            left: -12px;
-            top: -3px;
-            width: 32px;
-            height: 18px;
+            left: -18.5%;
+            top: -12%;
+            width: 49.2%;
+            height: 72%;
             background: linear-gradient(135deg, #d0d0d0, #b0b0b0);
             border-radius: 50%;
             transform: rotate(-25deg);
@@ -577,10 +585,10 @@
         .mustache::after {
             content: '';
             position: absolute;
-            right: -12px;
-            top: -3px;
-            width: 32px;
-            height: 18px;
+            right: -18.5%;
+            top: -12%;
+            width: 49.2%;
+            height: 72%;
             background: linear-gradient(45deg, #d0d0d0, #b0b0b0);
             border-radius: 50%;
             transform: rotate(25deg);
@@ -604,14 +612,14 @@
             border-radius: 30px 30px 15px 15px;
         }
 
-        /* Nariz más realista */
+        /* Nariz más realista - escalada */
         .nose {
             position: absolute;
-            top: 92px;
+            top: 41.8%;
             left: 50%;
             transform: translateX(-50%);
-            width: 18px;
-            height: 28px;
+            width: 10%;
+            height: 12.7%;
             background: radial-gradient(ellipse at 40% 30%, #f8c4b8 0%, #f0b0a4 40%, #e8a090 100%);
             border-radius: 9px 9px 7px 7px;
             box-shadow: 
@@ -623,41 +631,41 @@
         .nose::before {
             content: '';
             position: absolute;
-            bottom: 2px;
+            bottom: 7%;
             left: 50%;
             transform: translateX(-50%);
-            width: 8px;
-            height: 4px;
+            width: 44%;
+            height: 14%;
             background: rgba(220, 180, 160, 0.6);
             border-radius: 4px 4px 2px 2px;
         }
 
-        /* Fosas nasales */
+        /* Fosas nasales escaladas */
         .nostril {
             position: absolute;
-            bottom: 4px;
-            width: 2px;
-            height: 3px;
+            bottom: 14%;
+            width: 11%;
+            height: 11%;
             background: rgba(0, 0, 0, 0.4);
             border-radius: 50%;
         }
 
         .nostril-left {
-            left: 5px;
+            left: 28%;
         }
 
         .nostril-right {
-            right: 5px;
+            right: 28%;
         }
 
-        /* Boca más realista */
+        /* Boca más realista - escalada */
         .mouth {
             position: absolute;
-            top: 148px;
+            top: 67.3%;
             left: 50%;
             transform: translateX(-50%);
-            width: 45px;
-            height: 22px;
+            width: 25%;
+            height: 10%;
             background: linear-gradient(to bottom, 
                 #cd6155 0%, 
                 #a93226 40%, 
@@ -674,11 +682,11 @@
         .mouth::before {
             content: '';
             position: absolute;
-            top: -2px;
+            top: -9%;
             left: 50%;
             transform: translateX(-50%);
-            width: 35px;
-            height: 4px;
+            width: 78%;
+            height: 18%;
             background: linear-gradient(to right, 
                 transparent 0%, 
                 rgba(180, 100, 100, 0.8) 50%, 
@@ -688,7 +696,7 @@
 
         /* Estado de habla */
         .mouth.hablando {
-            height: 35px;
+            height: 15.9%;
             background: linear-gradient(to bottom, 
                 #922b21 0%, 
                 #641e16 40%, 
@@ -697,98 +705,99 @@
             animation: hablar 0.3s infinite alternate, mouthTalk 4s ease-in-out infinite;
         }
 
-        /* Químicos flotantes */
+        /* Químicos flotantes escalados */
         .chemical {
             position: absolute;
-            font-size: 24px;
+            font-size: clamp(16px, 4vw, 24px);
             font-weight: bold;
             opacity: 0.8;
             animation: float 8s ease-in-out infinite;
         }
 
         .chemical:nth-child(1) {
-            top: 50px;
-            left: 20px;
+            top: clamp(30px, 8vw, 50px);
+            left: clamp(10px, 3vw, 20px);
             color: #3498db;
             animation-delay: 0s;
         }
 
         .chemical:nth-child(2) {
-            top: 100px;
-            right: 20px;
+            top: clamp(60px, 15vw, 100px);
+            right: clamp(10px, 3vw, 20px);
             color: #e74c3c;
             animation-delay: 2s;
         }
 
         .chemical:nth-child(3) {
-            bottom: 100px;
-            left: 30px;
+            bottom: clamp(60px, 15vw, 100px);
+            left: clamp(15px, 4vw, 30px);
             color: #2ecc71;
             animation-delay: 4s;
         }
 
         .chemical:nth-child(4) {
-            bottom: 50px;
-            right: 30px;
+            bottom: clamp(30px, 8vw, 50px);
+            right: clamp(15px, 4vw, 30px);
             color: #f39c12;
             animation-delay: 6s;
         }
 
-        /* Título */
+        /* Título escalado */
         .title {
             position: absolute;
-            bottom: 20px;
+            bottom: 5%;
             left: 50%;
             transform: translateX(-50%);
             color: #2c3e50;
-            font-size: 14px;
+            font-size: clamp(10px, 2.8vw, 14px);
             font-weight: bold;
             text-align: center;
             animation: titlePulse 3s ease-in-out infinite;
+            line-height: 1.2;
         }
 
-        /* Globo de información */
+        /* Globo de información responsive */
         #globo-info {
             position: absolute;
-            top: -140px;
+            top: clamp(-120px, -30vw, -140px);
             left: 50%;
             transform: translateX(-50%);
-            min-width: 320px;
-            max-width: 400px;
-            background: white;
-            border-radius: 20px;
-            padding: 20px 25px;
+            min-width: clamp(280px, 80vw, 320px);
+            max-width: clamp(350px, 90vw, 400px);
+            background: rgb(64, 226, 186);
+            border-radius: clamp(15px, 4vw, 20px);
+            padding: clamp(15px, 4vw, 25px);
             box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            font-size: 14px;
+            font-size: clamp(12px, 3vw, 14px);
             text-align: left;
             opacity: 0;
             transform: translateX(-50%) translateY(-20px);
             transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             z-index: 10;
-            border: 3px solid #e0e0e0;
+            border: 3px solid #43e996;
         }
 
         #globo-info::before,
         #globo-info::after {
             content: '';
             position: absolute;
-            background: white;
+            background: rgb(86, 231, 195);
             border-radius: 50%;
-            border: 3px solid #e0e0e0;
+            border: 3px solid #97afa1;
         }
         
         #globo-info::before {
-            width: 20px;
-            height: 20px;
-            bottom: -12px;
-            left: 30px;
+            width: clamp(15px, 4vw, 20px);
+            height: clamp(15px, 4vw, 20px);
+            bottom: clamp(-9px, -2vw, -12px);
+            left: clamp(25px, 6vw, 30px);
         }
         
         #globo-info::after {
-            width: 15px;
-            height: 15px;
-            bottom: -18px;
-            left: 50px;
+            width: clamp(12px, 3vw, 15px);
+            height: clamp(12px, 3vw, 15px);
+            bottom: clamp(-14px, -3.5vw, -18px);
+            left: clamp(40px, 10vw, 50px);
         }
 
         #globo-info.visible {
@@ -797,14 +806,14 @@
         }
 
         .info-row { 
-            margin: 10px 0; 
+            margin: clamp(8px, 2vw, 10px) 0; 
             display: flex;
             align-items: center;
         }
         .info-title { 
             font-weight: bold; 
             color: #2563eb;
-            min-width: 140px;
+            min-width: clamp(120px, 30vw, 140px);
             margin-right: 8px;
         }
         .info-value {
@@ -813,6 +822,24 @@
         }
         .info-ok { color:#065f46; }
         .info-err { color:#dc2626; }
+
+        /* Escudos escalados */
+        .escudo {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: clamp(120px, 30vw, 180px);
+            height: clamp(120px, 30vw, 180px);
+            animation: girar 5s linear infinite;
+        }
+
+        .izquierda {
+            left: clamp(20px, 8vw, 90px);
+        }
+
+        .derecha {
+            right: clamp(20px, 8vw, 90px);
+        }
 
         /* Animaciones optimizadas */
         @keyframes hairFloat {
@@ -835,13 +862,13 @@
         }
 
         @keyframes mouthTalk {
-            0%, 100% { border-radius: 0 0 40px 40px; height: 22px; }
-            50% { border-radius: 20px; height: 25px; }
+            0%, 100% { border-radius: 0 0 40px 40px; height: 10%; }
+            50% { border-radius: 20px; height: 11.4%; }
         }
 
         @keyframes hablar {
-            from { height: 25px; }
-            to { height: 35px; }
+            from { height: 11.4%; }
+            to { height: 15.9%; }
         }
 
         @keyframes float {
@@ -881,6 +908,15 @@
             51%, 100% { opacity: 0; }
         }
 
+        @keyframes girar {
+            from {
+                transform: translateY(-50%) rotateY(0deg);
+            }
+            to {
+                transform: translateY(-50%) rotateY(360deg);
+            }
+        }
+
         /* Efectos hover */
         .einstein-container:hover .chemical {
             animation-duration: 2s;
@@ -895,66 +931,217 @@
             animation-duration: 1s;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .controls {
-                bottom: -60px;
-                gap: 15px;
+        /* Media queries específicas para diferentes dispositivos */
+        
+        /* Móviles pequeños (320px - 480px) */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
             }
             
-            .control-btn {
-                width: 50px;
-                height: 50px;
-                font-size: 20px;
+            h1 {
+                font-size: 1.2rem;
+                margin-bottom: 10px;
             }
             
             #cara-container {
-                width: 250px;
-                height: 320px;
-            }
-            
-            .einstein-container {
-                width: 250px;
-                height: 320px;
-            }
-            
-            .hair {
                 width: 180px;
-                height: 100px;
-                top: 12px;
+                height: 240px;
             }
             
-            .face {
-                width: 140px;
-                height: 180px;
-                top: 65px;
+            .controls {
+                bottom: -50px;
+                gap: 8px;
+            }
+            
+            .control-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 14px;
+            }
+            
+            .escudo {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .izquierda {
+                left: 10px;
+            }
+            
+            .derecha {
+                right: 10px;
+            }
+            
+            #globo-info {
+                min-width: 250px;
+                max-width: 300px;
+                font-size: 11px;
+                padding: 12px 15px;
+                top: -100px;
+            }
+            
+            .info-title {
+                min-width: 100px;
+                font-size: 10px;
             }
         }
-    .escudo {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 180px;
-      height: 180px;
-      animation: girar 5s linear infinite;
-    }
 
-    .izquierda {
-      left: 90px;
-    }
+        /* Móviles medianos (481px - 768px) */
+        @media (min-width: 481px) and (max-width: 768px) {
+            #cara-container {
+                width: 220px;
+                height: 280px;
+            }
+            
+            .controls {
+                bottom: -60px;
+                gap: 12px;
+            }
+            
+            .control-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
+            
+            .escudo {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .izquierda {
+                left: 30px;
+            }
+            
+            .derecha {
+                right: 30px;
+            }
+        }
 
-    .derecha {
-      right: 90px;
-    }
+        /* Tablets (769px - 1024px) */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            #cara-container {
+                width: 260px;
+                height: 350px;
+            }
+            
+            .controls {
+                bottom: -70px;
+                gap: 16px;
+            }
+            
+            .control-btn {
+                width: 55px;
+                height: 55px;
+                font-size: 22px;
+            }
+            
+            .escudo {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .izquierda {
+                left: 60px;
+            }
+            
+            .derecha {
+                right: 60px;
+            }
+        }
 
-    @keyframes girar {
-      from {
-        transform: translateY(-50%) rotateY(0deg);
-      }
-      to {
-        transform: translateY(-50%) rotateY(360deg);
-      }
-    }
+        /* Laptops y pantallas grandes (1025px+) */
+        @media (min-width: 1025px) {
+            .escudo {
+                width: 180px;
+                height: 180px;
+            }
+            
+            .izquierda {
+                left: 90px;
+            }
+            
+            .derecha {
+                right: 90px;
+            }
+        }
+
+        /* Orientación horizontal en móviles */
+        @media (max-height: 500px) and (orientation: landscape) {
+            body {
+                padding: 5px;
+            }
+            
+            h1 {
+                font-size: 1rem;
+                margin-bottom: 5px;
+            }
+            
+            #cara-container {
+                width: 160px;
+                height: 200px;
+            }
+            
+            .controls {
+                bottom: -40px;
+                gap: 6px;
+            }
+            
+            .control-btn {
+                width: 30px;
+                height: 30px;
+                font-size: 12px;
+            }
+            
+            .escudo {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .izquierda {
+                left: 5px;
+            }
+            
+            .derecha {
+                right: 5px;
+            }
+            
+            #globo-info {
+                top: -80px;
+                min-width: 200px;
+                max-width: 250px;
+                font-size: 10px;
+                padding: 8px 12px;
+            }
+        }
+
+        /* Pantallas muy pequeñas */
+        @media (max-width: 320px) {
+            #cara-container {
+                width: 160px;
+                height: 210px;
+            }
+            
+            .control-btn {
+                width: 30px;
+                height: 30px;
+                font-size: 12px;
+            }
+            
+            .escudo {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .izquierda {
+                left: 5px;
+            }
+            
+            .derecha {
+                right: 5px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1054,115 +1241,6 @@
             "carbono":     { quechua: "k'illimsayaq", simbolo: "C", numero: 6, masa: "12.011" },
             "nitrogeno":   { quechua: "chhukwi", simbolo: "N", numero: 7, masa: "14.007" },
             "oxigeno":     { quechua: "Wayrasamay", simbolo: "O", numero: 8, masa: "15.999" },
-            "fluor":       { quechua: "Flur", simbolo: "F", numero: 9, masa: "18.998" },
-            "neon":        { quechua: "Niyun", simbolo: "Ne", numero: 10, masa: "20.180" },
-            "sodio":       { quechua: "Natriyu", simbolo: "Na", numero: 11, masa: "22.990" },
-            "magnesio":    { quechua: "Qunta", simbolo: "Mg", numero: 12, masa: "24.305" },
-            "aluminio":    { quechua: "Aluminiyu", simbolo: "Al", numero: 13, masa: "26.982" },
-            "silicio":     { quechua: "Silisiyu", simbolo: "Si", numero: 14, masa: "28.085" },
-            "fosforo":     { quechua: "Fusfuru", simbolo: "P", numero: 15, masa: "30.974" },
-            "azufre":      { quechua: "Salliy", simbolo: "S", numero: 16, masa: "32.06" },
-            "cloro":       { quechua: "Kluru", simbolo: "Cl", numero: 17, masa: "35.45" },
-            "argon":       { quechua: "Arkun", simbolo: "Ar", numero: 18, masa: "39.948" },
-            "potasio":     { quechua: "Putasiyu", simbolo: "K", numero: 19, masa: "39.098" },
-            "calcio":      { quechua: "Iskuya", simbolo: "Ca", numero: 20, masa: "40.078" },
-            "escandio":    { quechua: "Iskandiyu", simbolo: "Sc", numero: 21, masa: "44.956" },
-            "titanio":     { quechua: "Titaniyu", simbolo: "Ti", numero: 22, masa: "47.867" },
-            "vanadio":     { quechua: "Vanadiyu", simbolo: "V", numero: 23, masa: "50.942" },
-            "cromo":       { quechua: "Krumu", simbolo: "Cr", numero: 24, masa: "51.996" },
-            "manganeso":   { quechua: "Mankanisu", simbolo: "Mn", numero: 25, masa: "54.938" },
-            "hierro":      { quechua: "Q'illay", simbolo: "Fe", numero: 26, masa: "55.845" },
-            "cobalto":     { quechua: "Ankasi", simbolo: "Co", numero: 27, masa: "58.933" },
-            "niquel":      { quechua: "Nikil", simbolo: "Ni", numero: 28, masa: "58.693" },
-            "cobre":       { quechua: "Anta", simbolo: "Cu", numero: 29, masa: "63.546" },
-            "zinc":        { quechua: "Sink", simbolo: "Zn", numero: 30, masa: "65.38" },
-            "galio":       { quechua: "Galiu", simbolo: "Ga", numero: 31, masa: "69.723" },
-            "germanio":    { quechua: "Hirmaniyu", simbolo: "Ge", numero: 32, masa: "72.630" },
-            "arsenico":    { quechua: "Arsiniku", simbolo: "As", numero: 33, masa: "74.922" },
-            "selenio":     { quechua: "Siliniyu", simbolo: "Se", numero: 34, masa: "78.971" },
-            "bromo":       { quechua: "Brumu", simbolo: "Br", numero: 35, masa: "79.904" },
-            "kripton":     { quechua: "Kripton", simbolo: "Kr", numero: 36, masa: "83.798" },
-            "rubidio":     { quechua: "Rupidiyu", simbolo: "Rb", numero: 37, masa: "85.468" },
-            "estroncio":   { quechua: "Istrunsiyu", simbolo: "Sr", numero: 38, masa: "87.62" },
-            "itrio":       { quechua: "Itriyu", simbolo: "Y", numero: 39, masa: "88.906" },
-            "circonio":    { quechua: "Sircunio", simbolo: "Zr", numero: 40, masa: "91.224" },
-            "niobio":      { quechua: "Niyubiyu", simbolo: "Nb", numero: 41, masa: "92.906" },
-            "molibdeno":   { quechua: "Muliptiniyu", simbolo: "Mo", numero: 42, masa: "95.95" },
-            "tecnecio":    { quechua: "Tiknisiyu", simbolo: "Tc", numero: 43, masa: "98" },
-            "rutenio":     { quechua: "Ruthiniyu", simbolo: "Ru", numero: 44, masa: "101.07" },
-            "rodio":       { quechua: "Rutiyu", simbolo: "Rh", numero: 45, masa: "102.91" },
-            "paladio":     { quechua: "Qullqiya", simbolo: "Pd", numero: 46, masa: "106.42" },
-            "plata":       { quechua: "Qullqi", simbolo: "Ag", numero: 47, masa: "107.868" },
-            "cadmio":      { quechua: "Kadmiyu", simbolo: "Cd", numero: 48, masa: "112.41" },
-            "indio":       { quechua: "Indiyu", simbolo: "In", numero: 49, masa: "114.82" },
-            "estaño":      { quechua: "Chayanta", simbolo: "Sn", numero: 50, masa: "118.71" },
-            "antimonio":   { quechua: "Hanku", simbolo: "Sb", numero: 51, masa: "121.76" },
-            "telurio":     { quechua: "Tiluriyu", simbolo: "Te", numero: 52, masa: "127.60" },
-            "yodo":        { quechua: "Yudu", simbolo: "I", numero: 53, masa: "126.90" },
-            "xenon":       { quechua: "Sinun", simbolo: "Xe", numero: 54, masa: "131.29" },
-            "cesio":       { quechua: "Sisiyu", simbolo: "Cs", numero: 55, masa: "132.91" },
-            "bario":       { quechua: "Bariyu", simbolo: "Ba", numero: 56, masa: "137.33" },
-            "lantano":     { quechua: "Lanthanu", simbolo: "La", numero: 57, masa: "138.91" },
-            "cerio":       { quechua: "Siriyu", simbolo: "Ce", numero: 58, masa: "140.12" },
-            "praseodimio": { quechua: "Prasiyudimiyu", simbolo: "Pr", numero: 59, masa: "140.91" },
-            "neodimio":    { quechua: "Neodimiyu", simbolo: "Nd", numero: 60, masa: "144.24" },
-            "prometio":    { quechua: "Prumithiyu", simbolo: "Pm", numero: 61, masa: "145" },
-            "samario":     { quechua: "Samariyu", simbolo: "Sm", numero: 62, masa: "150.36" },
-            "europio":     { quechua: "Eyurupiyu", simbolo: "Eu", numero: 63, masa: "151.96" },
-            "gadolinio":   { quechua: "Gaduliniyu", simbolo: "Gd", numero: 64, masa: "157.25" },
-            "terbio":      { quechua: "Tirbiyu", simbolo: "Tb", numero: 65, masa: "158.93" },
-            "disprosio":   { quechua: "Disprusiyu", simbolo: "Dy", numero: 66, masa: "162.50" },
-            "holmio":      { quechua: "Ulmiyu", simbolo: "Ho", numero: 67, masa: "164.93" },
-            "erbio":       { quechua: "Irbiyu", simbolo: "Er", numero: 68, masa: "167.26" },
-            "tulio":       { quechua: "Thuliyu", simbolo: "Tm", numero: 69, masa: "168.93" },
-            "iterbio":     { quechua: "Itirbiyu", simbolo: "Yb", numero: 70, masa: "173.05" },
-            "lutecio":     { quechua: "Lutisiyu", simbolo: "Lu", numero: 71, masa: "174.97" },
-            "hafnio":      { quechua: "Hafniyu", simbolo: "Hf", numero: 72, masa: "178.49" },
-            "tantalio":    { quechua: "Tantaliyu", simbolo: "Ta", numero: 73, masa: "180.95" },
-            "wolframio":   { quechua: "Wulframiyu", simbolo: "W", numero: 74, masa: "183.84" },
-            "renio":       { quechua: "Riniyu", simbolo: "Re", numero: 75, masa: "186.21" },
-            "osmio":       { quechua: "Usmiyu", simbolo: "Os", numero: 76, masa: "190.23" },
-            "iridio":      { quechua: "iritdiyu", simbolo: "Ir", numero: 77, masa: "192.22" },
-            "platino":     { quechua: "Paladiyu", simbolo: "Pt", numero: 78, masa: "195.08" },
-            "oro":         { quechua: "Quri", simbolo: "Au", numero: 79, masa: "196.97" },
-            "mercurio":    { quechua: "Qatuylla", simbolo: "Hg", numero: 80, masa: "200.59" },
-            "talio":       { quechua: "Thaliyu", simbolo: "Tl", numero: 81, masa: "204.38" },
-            "plomo":       { quechua: "T'iti", simbolo: "Pb", numero: 82, masa: "207.2" },
-            "bismuto":     { quechua: "Bismutu", simbolo: "Bi", numero: 83, masa: "208.98" },
-            "polonio":     { quechua: "Puluniyu", simbolo: "Po", numero: 84, masa: "209" },
-            "astato":      { quechua: "Astatu", simbolo: "At", numero: 85, masa: "210" },
-            "radon":       { quechua: "Radun", simbolo: "Rn", numero: 86, masa: "222" },
-            "francio":     { quechua: "Fransiyu", simbolo: "Fr", numero: 87, masa: "223" },
-            "radio":       { quechua: "Radiyu", simbolo: "Ra", numero: 88, masa: "226" },
-            "actinio":     { quechua: "Aktiniyu", simbolo: "Ac", numero: 89, masa: "227" },
-            "torio":       { quechua: "Thuriyu", simbolo: "Th", numero: 90, masa: "232.04" },
-            "protactinio": { quechua: "Prutaktiniyu", simbolo: "Pa", numero: 91, masa: "231.04" },
-            "uranio":      { quechua: "Uraniyu", simbolo: "U", numero: 92, masa: "238.03" },
-            "neptunio":    { quechua: "Niptuniyu", simbolo: "Np", numero: 93, masa: "237" },
-            "plutonio":    { quechua: "Plutuniyu", simbolo: "Pu", numero: 94, masa: "244" },
-            "americio":    { quechua: "Amirisiyu", simbolo: "Am", numero: 95, masa: "243" },
-            "curio":       { quechua: "Kuriyu", simbolo: "Cm", numero: 96, masa: "247" },
-            "berkelio":    { quechua: "Birkiliyu", simbolo: "Bk", numero: 97, masa: "247" },
-            "californio":  { quechua: "Kalifurniyu", simbolo: "Cf", numero: 98, masa: "251" },
-            "einsteinio":  { quechua: "Instiniyu", simbolo: "Es", numero: 99, masa: "252" },
-            "fermio":      { quechua: "Firmiyu", simbolo: "Fm", numero: 100, masa: "257" },
-            "mendelevio":  { quechua: "Mindiliviyu", simbolo: "Md", numero: 101, masa: "258" },
-            "nobelio":     { quechua: "Nubiliyu", simbolo: "No", numero: 102, masa: "259" },
-            "lawrencio":   { quechua: "Lawrinsiyu", simbolo: "Lr", numero: 103, masa: "266" },
-            "rutherfordio":{ quechua: "Ruthirfurdiyu", simbolo: "Rf", numero: 104, masa: "267" },
-            "dubnio":      { quechua: "Dubniyu", simbolo: "Db", numero: 105, masa: "268" },
-            "seaborgio":   { quechua: "Siyaburhiyu", simbolo: "Sg", numero: 106, masa: "269" },
-            "bohrio":      { quechua: "Buriyu", simbolo: "Bh", numero: 107, masa: "270" },
-            "hassio":      { quechua: "Asiyu", simbolo: "Hs", numero: 108, masa: "277" },
-            "meitnerio":   { quechua: "Mitniriyu", simbolo: "Mt", numero: 109, masa: "278" },
-            "darmstadtio": { quechua: "Darmstatiyu", simbolo: "Ds", numero: 110, masa: "281" },
-            "roentgenio":  { quechua: "Ruyinthiniyu", simbolo: "Rg", numero: 111, masa: "282" },
-            "copernicio":  { quechua: "Kupirnisiyu", simbolo: "Cn", numero: 112, masa: "285" },
-            "nihonio":     { quechua: "Nihuniyu", simbolo: "Nh", numero: 113, masa: "286" },
-            "flerovio":    { quechua: "Flirupiyu", simbolo: "Fl", numero: 114, masa: "289" },
-            "moscovio":    { quechua: "Muskuviyu", simbolo: "Mc", numero: 115, masa: "290" },
-            "livermorio":  { quechua: "Lipirmuniyu", simbolo: "Lv", numero: 116, masa: "293" },
-            "teneso":      { quechua: "Tinisiyu", simbolo: "Ts", numero: 117, masa: "294" },
             "oganeson":    { quechua: "Ukanisun", simbolo: "Og", numero: 118, masa: "294" }
         };
 
