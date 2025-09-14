@@ -1987,46 +1987,4 @@
         window.mostrarAyuda = mostrarElementosDisponibles;
     </script>
 </body>
-           }
-                lastTouchEnd = now;
-            }, false);
-        }
-
-        // NUEVO: Función de ayuda para mostrar elementos disponibles
-        function mostrarElementosDisponibles() {
-            const elementos = Object.keys(ELEMENTOS);
-            const mitad = Math.ceil(elementos.length / 2);
-            const columna1 = elementos.slice(0, mitad);
-            const columna2 = elementos.slice(mitad);
-            
-            const htmlAyuda = `
-                <div class="info-ok">
-                    <div class="info-row">
-                        <span class="info-title">📋 Elementos disponibles (${elementos.length}):</span>
-                    </div>
-                    <div style="display: flex; gap: 20px; margin-top: 10px;">
-                        <div style="flex: 1;">
-                            ${columna1.map(el => `• ${capitalizar(el)}`).join('<br>')}
-                        </div>
-                        <div style="flex: 1;">
-                            ${columna2.map(el => `• ${capitalizar(el)}`).join('<br>')}
-                        </div>
-                    </div>
-                    <div class="info-row" style="margin-top: 15px;">
-                        <span class="info-title">💡 Tip:</span>
-                        <span class="info-value">Di claramente solo el nombre del elemento</span>
-                    </div>
-                </div>
-            `;
-            
-            mostrarGloboInfo(htmlAyuda);
-            
-            const primerosElementos = elementos.slice(0, 5).join(', ');
-            hablar(`Tengo ${elementos.length} elementos disponibles. Por ejemplo: ${primerosElementos} y muchos más. ¿Cuál quieres saber?`);
-        }
-
-        // NUEVO: Comando especial para mostrar ayuda
-        window.mostrarAyuda = mostrarElementosDisponibles;
-    </script>
-</body>
 </html>
